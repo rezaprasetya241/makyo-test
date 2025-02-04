@@ -31,6 +31,22 @@ const Dropdown = React.memo((props: Props) => {
       )
     );
   }, []);
+
+  const selectData = (val: string) => {
+    if (props.isMultiple) {
+      if (selectedOption.includes(val) && Array.isArray(selectedOption)) {
+        setSelectedOption(
+          selectedOption?.filter((item: string) => item !== val)
+        );
+      } else {
+        setSelectedOption([...selectedOption, val]);
+      }
+    } else {
+      setSelectedOption(val);
+    }
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     setSelectedOption(props.isMultiple ? [] : "");
   }, [props.isMultiple]);
@@ -127,23 +143,7 @@ const Dropdown = React.memo((props: Props) => {
                       : ""
                   }`}
                   onClick={() => {
-                    if (props.isMultiple) {
-                      if (
-                        selectedOption.includes(option.value) &&
-                        Array.isArray(selectedOption)
-                      ) {
-                        setSelectedOption(
-                          selectedOption?.filter(
-                            (item: string) => item !== option.value
-                          )
-                        );
-                      } else {
-                        setSelectedOption([...selectedOption, option.value]);
-                      }
-                    } else {
-                      setSelectedOption(option.value);
-                    }
-                    setIsOpen(false);
+                    selectData(option.value);
                   }}
                 >
                   {highlightText(option.label, searchQuery)}
